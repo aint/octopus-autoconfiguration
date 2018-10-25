@@ -1,0 +1,18 @@
+### Intellij ###
+.idea/
+*.iml
+out/
+
+### Java ###
+# Compiled class file
+*.class
+# Log file
+*.log
+
+### Maven ###
+target/
+.mvn/wrapper/maven-wrapper.jar
+
+### macOS ###
+.DS_Store
+._*
