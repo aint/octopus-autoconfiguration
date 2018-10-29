@@ -31,10 +31,10 @@ public class IntegrationsActuatorEndpoint {
                 .findFirst()
                 .orElse("integration.base-url");
 
-        List<String> deps = strings.stream()
+        Map<String, String> deps = strings.stream()
                 .filter(s -> s.startsWith(integrationPrefix))
                 .map(s -> s.substring(integrationPrefix.length() + 1))
-                .collect(Collectors.toList());
+                .collect(Collectors.toMap(serviceName -> serviceName, x -> "service"));
 
         String serviceName = strings.stream()
                 .filter(s -> s.contains("application.name"))
@@ -44,6 +44,7 @@ public class IntegrationsActuatorEndpoint {
 
         Map<String, Object> map = new HashMap<>();
         map.put(serviceName, deps);
+        map.put("dependencies", deps);
 
         return map;
     }
