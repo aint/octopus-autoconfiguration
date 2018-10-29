@@ -20,6 +20,7 @@ public class IntegrationsActuatorEndpoint {
     public Map<String, Object> integrations() {
         Set<String> strings = StreamSupport.stream(env.getPropertySources().spliterator(), false)
                 .filter(ps -> ps instanceof EnumerablePropertySource)
+                .filter(ps -> ps.getName().contains("applicationConfig:"))
                 .map(ps -> ((EnumerablePropertySource) ps).getPropertyNames())
                 .flatMap(Arrays::stream)
                 .collect(Collectors.toSet());
