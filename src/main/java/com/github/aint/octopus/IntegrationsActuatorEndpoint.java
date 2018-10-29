@@ -24,8 +24,14 @@ public class IntegrationsActuatorEndpoint {
                 .flatMap(Arrays::stream)
                 .collect(Collectors.toSet());
 
+        String integrationPrefix = strings.stream()
+                .filter(s -> s.equals("octopus.integration.prefix"))
+                .map(s -> env.getProperty(s))
+                .findFirst()
+                .orElse("integration.base-url");
+
         List<String> deps = strings.stream()
-                .filter(s -> s.contains("base-url"))
+                .filter(s -> s.startsWith(integrationPrefix))
                 .map(s -> env.getProperty(s))
                 .collect(Collectors.toList());
 
