@@ -33,7 +33,7 @@ public class IntegrationsActuatorEndpoint {
 
         List<String> deps = strings.stream()
                 .filter(s -> s.startsWith(integrationPrefix))
-                .map(s -> env.getProperty(s))
+                .map(s -> s.substring(integrationPrefix.length() + 1))
                 .collect(Collectors.toList());
 
         String serviceName = strings.stream()
