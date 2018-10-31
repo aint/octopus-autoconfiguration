@@ -42,8 +42,15 @@ public class IntegrationsActuatorEndpoint {
                 .orElseThrow(NoSuchElementException::new);
 
 
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            deps.put("com.mysql.jdbc.Driver", "database");
+        } catch (ClassNotFoundException e) {
+
+        }
+
         Map<String, Object> map = new HashMap<>();
-        map.put(serviceName, deps);
+        map.put("name", serviceName);
         map.put("dependencies", deps);
 
         return map;
