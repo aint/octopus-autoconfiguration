@@ -6,6 +6,8 @@ import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 
+import java.sql.Driver;
+import java.sql.DriverManager;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -42,11 +44,10 @@ public class IntegrationsActuatorEndpoint {
                 .orElseThrow(NoSuchElementException::new);
 
 
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            deps.put("com.mysql.jdbc.Driver", "database");
-        } catch (ClassNotFoundException e) {
-
+        Enumeration<Driver> drivers = DriverManager.getDrivers();
+        while (drivers.hasMoreElements()) {
+            String jdbcDriverName = drivers.nextElement().getClass().getName();
+            deps.put(jdbcDriverName, "database");
         }
 
         Map<String, Object> map = new HashMap<>();
