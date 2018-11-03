@@ -19,7 +19,7 @@ public class IntegrationsActuatorEndpoint {
     private ConfigurableEnvironment env;
 
     @ReadOperation
-    public Map<String, Object> integrations() {
+    public DependencyJson integrations() {
         Set<String> strings = StreamSupport.stream(env.getPropertySources().spliterator(), false)
                 .filter(ps -> ps instanceof EnumerablePropertySource)
                 .filter(ps -> ps.getName().contains("applicationConfig:"))
@@ -50,11 +50,7 @@ public class IntegrationsActuatorEndpoint {
             deps.put(jdbcDriverName, "database");
         }
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("name", serviceName);
-        map.put("dependencies", deps);
-
-        return map;
+        return new DependencyJson(serviceName, deps);
     }
 
 }
