@@ -48,9 +48,34 @@ public class IntegrationsActuatorEndpoint {
         while (drivers.hasMoreElements()) {
             String jdbcDriverName = drivers.nextElement().getClass().getName();
             deps.put(jdbcDriverName, "database");
+            deps.put(DbDependencyResolver.resolveDbName(jdbcDriverName), "database");
         }
 
         return new DependencyJson(serviceName, deps);
+    }
+
+    static class DbDependencyResolver {
+        public static String resolveDbName(String jdbcDriverClassName) {
+            if (jdbcDriverClassName.contains("mysql")) {
+                return "MySQL";
+            } else if (jdbcDriverClassName.contains("oracle")) {
+                return "Oracle";
+            } else if (jdbcDriverClassName.contains("db2")) {
+                return "DB2";
+            } else if (jdbcDriverClassName.contains("sybase")) {
+                return "Sybase";
+            } else if (jdbcDriverClassName.contains("teradata")) {
+                return "Teradata";
+            } else if (jdbcDriverClassName.contains("sqlserver")) {
+                return "SQLServer";
+            } else if (jdbcDriverClassName.contains("postgresql")) {
+                return "PostgreSql";
+            } else {
+                return "Unknown DB";
+            }
+        }
+
+
     }
 
 }
