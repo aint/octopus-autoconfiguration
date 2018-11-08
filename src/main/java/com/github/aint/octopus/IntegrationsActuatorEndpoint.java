@@ -40,6 +40,7 @@ public class IntegrationsActuatorEndpoint {
 
         String serviceName = strings.stream()
                 .filter(s -> s.contains("application.name"))
+                .map(s -> env.getProperty(s))
                 .findFirst()
                 .orElseThrow(NoSuchElementException::new);
 
