@@ -1,5 +1,6 @@
 package com.github.aint.octopus;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
@@ -12,6 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+@Slf4j
 @Endpoint(id = "integrations")
 public class IntegrationsActuatorEndpoint {
 
@@ -48,7 +50,7 @@ public class IntegrationsActuatorEndpoint {
         Enumeration<Driver> drivers = DriverManager.getDrivers();
         while (drivers.hasMoreElements()) {
             String jdbcDriverName = drivers.nextElement().getClass().getName();
-            deps.put(jdbcDriverName, "database");
+            log.info(jdbcDriverName);
             deps.put(DbDependencyResolver.resolveDbName(jdbcDriverName), "database");
         }
 
