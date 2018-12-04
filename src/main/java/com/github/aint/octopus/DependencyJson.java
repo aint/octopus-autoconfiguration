@@ -11,6 +11,8 @@ import java.util.Map;
 @AllArgsConstructor
 public class DependencyJson {
 
+    private String eventType;
+
     private String name;
 
     private Map<String, String> dependencies; // use enum with type
