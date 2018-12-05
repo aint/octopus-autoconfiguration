@@ -55,7 +55,6 @@ public class IntegrationsActuatorEndpoint {
         while (drivers.hasMoreElements()) {
             String jdbcDriverName = drivers.nextElement().getClass().getName();
             log.info(jdbcDriverName);
-            deps.put(DbDependencyResolver.resolveDbName(jdbcDriverName), "database");
             databases.add(DbDependencyResolver.resolveDbName(jdbcDriverName));
         }
         deps.put(DependencyJson.DependencyType.DATABASES, databases);
