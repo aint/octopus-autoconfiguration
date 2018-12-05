@@ -35,10 +35,13 @@ public class IntegrationsActuatorEndpoint {
                 .findFirst()
                 .orElse("integration.base-url");
 
-        Map<String, String> deps = strings.stream()
+        Set<String> services = strings.stream()
                 .filter(s -> s.startsWith(integrationPrefix))
                 .map(s -> s.substring(integrationPrefix.length() + 1))
-                .collect(Collectors.toMap(serviceName -> serviceName, x -> "service"));
+                .collect(Collectors.toSet());
+
+        Map<DependencyJson.DependencyType, Set<String>> deps = new EnumMap<>(DependencyJson.DependencyType.class);
+        deps.put(DependencyJson.DependencyType.SERVICES, services);
 
         String serviceName = strings.stream()
                 .filter(s -> s.contains("application.name"))
@@ -48,13 +51,16 @@ public class IntegrationsActuatorEndpoint {
 
 
         Enumeration<Driver> drivers = DriverManager.getDrivers();
+        Set<String> databases = new HashSet<>();
         while (drivers.hasMoreElements()) {
             String jdbcDriverName = drivers.nextElement().getClass().getName();
             log.info(jdbcDriverName);
             deps.put(DbDependencyResolver.resolveDbName(jdbcDriverName), "database");
+            databases.add(DbDependencyResolver.resolveDbName(jdbcDriverName));
         }
+        deps.put(DependencyJson.DependencyType.DATABASES, databases);
 
-        return new DependencyJson(serviceName, deps);
+        return new DependencyJson(DependencyJson.EventType.CREATE, serviceName, deps);
     }
 
     static class DbDependencyResolver {
