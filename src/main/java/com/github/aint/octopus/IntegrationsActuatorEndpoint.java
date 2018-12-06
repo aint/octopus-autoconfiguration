@@ -43,6 +43,17 @@ public class IntegrationsActuatorEndpoint {
         Map<DependencyJson.DependencyType, Set<String>> deps = new EnumMap<>(DependencyJson.DependencyType.class);
         deps.put(DependencyJson.DependencyType.SERVICES, services);
 
+        Set<String> lambdas = strings.stream()
+                .filter(s -> s.startsWith(integrationPrefix + ".lambdas"))
+                .map(s -> {
+                    int beginIndex = integrationPrefix.length() + ".lambdas".length() + 1;
+                    int endIndex = s.length() - 5;
+                    return s.substring(beginIndex, endIndex);
+                })
+                .collect(Collectors.toSet());
+
+        deps.put(DependencyJson.DependencyType.LAMBDAS, lambdas);
+
         String serviceName = strings.stream()
                 .filter(s -> s.contains("application.name"))
                 .map(s -> env.getProperty(s))
