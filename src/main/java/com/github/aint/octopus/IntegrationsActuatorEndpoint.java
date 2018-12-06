@@ -36,8 +36,8 @@ public class IntegrationsActuatorEndpoint {
                 .orElse("integration.base-url");
 
         Set<String> services = strings.stream()
-                .filter(s -> s.startsWith(integrationPrefix))
-                .map(s -> s.substring(integrationPrefix.length() + 1))
+                .filter(s -> s.startsWith(integrationPrefix + ".services"))
+                .map(s -> s.substring(integrationPrefix.length() + ".services".length() + 1))
                 .collect(Collectors.toSet());
 
         Map<DependencyJson.DependencyType, Set<String>> deps = new EnumMap<>(DependencyJson.DependencyType.class);
