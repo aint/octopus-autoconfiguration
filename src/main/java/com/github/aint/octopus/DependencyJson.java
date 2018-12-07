@@ -25,7 +25,7 @@ public class DependencyJson {
     }
 
     public enum DependencyType {
-        SERVICES, DATABASES, THIRD_PARTY
+        SERVICES, LAMBDAS, DATABASES, THIRD_PARTY
     }
 
 }
