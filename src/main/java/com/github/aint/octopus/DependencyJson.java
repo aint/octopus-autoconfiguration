@@ -18,6 +18,8 @@ public class DependencyJson {
 
     private String serviceName;
 
+    private String serviceMetadata;
+
     private Map<DependencyType, Set<String>> dependencies;
 
     public enum EventType {

@@ -70,7 +70,7 @@ public class IntegrationsActuatorEndpoint {
         }
         deps.put(DependencyJson.DependencyType.DATABASES, databases);
 
-        return new DependencyJson(DependencyJson.EventType.CREATE, serviceName, deps);
+        return new DependencyJson(DependencyJson.EventType.CREATE, serviceName, "api", deps);
     }
 
 }
