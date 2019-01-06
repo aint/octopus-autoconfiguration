@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
+import org.springframework.core.SpringVersion;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 
@@ -70,7 +71,17 @@ public class IntegrationsActuatorEndpoint {
         }
         deps.put(DependencyJson.DependencyType.DATABASES, databases);
 
-        return new DependencyJson(DependencyJson.EventType.CREATE, serviceName, "api", deps);
+        String serviceMetadata = String.format("%s %s", getJavaVersion(), getSpringVersion());
+        return new DependencyJson(DependencyJson.EventType.CREATE, serviceName, serviceMetadata, deps);
+    }
+
+
+    private static String getJavaVersion() {
+        return System.getProperty("java.version");
+    }
+
+    private static String getSpringVersion() {
+        return SpringVersion.getVersion();
     }
 
 }
