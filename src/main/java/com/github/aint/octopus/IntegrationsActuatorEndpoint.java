@@ -5,34 +5,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.core.SpringVersion;
-import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.EnumerablePropertySource;
 
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Slf4j
 @Endpoint(id = "integrations")
 public class IntegrationsActuatorEndpoint {
 
     @Autowired
-    private ConfigurableEnvironment env;
+    private ApplicationPropertiesProvider propertiesProvider;
 
     @ReadOperation
     public DependencyJson integrations() {
-        Set<String> strings = StreamSupport.stream(env.getPropertySources().spliterator(), false)
-                .filter(ps -> ps instanceof EnumerablePropertySource)
-                .filter(ps -> ps.getName().contains("applicationConfig:"))
-                .map(ps -> ((EnumerablePropertySource) ps).getPropertyNames())
-                .flatMap(Arrays::stream)
-                .collect(Collectors.toSet());
+        Set<String> strings = propertiesProvider.getPropertyNames();
 
         String integrationPrefix = strings.stream()
                 .filter(s -> s.equals("octopus.integration.prefix"))
-                .map(s -> env.getProperty(s))
+                .map(s -> propertiesProvider.getProperty(s))
                 .findFirst()
                 .orElse("integration.base-url");
 
@@ -57,7 +49,7 @@ public class IntegrationsActuatorEndpoint {
 
         String serviceName = strings.stream()
                 .filter(s -> s.contains("application.name"))
-                .map(s -> env.getProperty(s))
+                .map(s -> propertiesProvider.getProperty(s))
                 .findFirst()
                 .orElseThrow(NoSuchElementException::new);
 
