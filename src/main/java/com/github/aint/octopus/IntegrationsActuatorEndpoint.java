@@ -22,11 +22,7 @@ public class IntegrationsActuatorEndpoint {
     public DependencyJson integrations() {
         Set<String> strings = propertiesProvider.getPropertyNames();
 
-        String integrationPrefix = strings.stream()
-                .filter(s -> s.equals("octopus.integration.prefix"))
-                .map(s -> propertiesProvider.getProperty(s))
-                .findFirst()
-                .orElse("integration.base-url");
+        String integrationPrefix = getPropertyValue(strings,"octopus.integration.prefix").orElse("integration.base-url");
 
         Set<String> services = strings.stream()
                 .filter(s -> s.startsWith(integrationPrefix + ".services"))
@@ -47,12 +43,8 @@ public class IntegrationsActuatorEndpoint {
 
         deps.put(DependencyJson.DependencyType.LAMBDAS, lambdas);
 
-        String serviceName = strings.stream()
-                .filter(s -> s.contains("application.name"))
-                .map(s -> propertiesProvider.getProperty(s))
-                .findFirst()
-                .orElseThrow(NoSuchElementException::new);
-
+        String serviceName = getPropertyValue(strings, "application.name")
+                .orElseThrow(() -> new NoSuchElementException("application.name property not found"));
 
         Enumeration<Driver> drivers = DriverManager.getDrivers();
         Set<String> databases = new HashSet<>();
@@ -65,6 +57,13 @@ public class IntegrationsActuatorEndpoint {
 
         String serviceMetadata = String.format("%s %s", getJavaVersion(), getSpringVersion());
         return new DependencyJson(DependencyJson.EventType.CREATE, serviceName, serviceMetadata, deps);
+    }
+
+    private Optional<String> getPropertyValue(Set<String> properties, String propertyName) {
+        return properties.stream()
+                .filter(s -> s.equals(propertyName))
+                .map(s -> propertiesProvider.getProperty(s))
+                .findFirst();
     }
 
 
