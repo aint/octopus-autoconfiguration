@@ -15,9 +15,33 @@
 </p>
 
 
-# octopus-autoconfiguration
+# Octopus: Spring Boot autoconfiguration
 
-
-Spring Boot autoconfig support for Octupus project (microservices dependency graph).
+Spring Boot autoconfiguration supports for Octopus project.
 
 ![Nothing is beyoun our reach](https://lindaivespol.files.wordpress.com/2018/06/pol.jpg)
+
+# Installation
+
+**Step 1.** Add the JitPack repository to your pom.xml file 
+
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+
+**Step 2.** Add the dependency
+
+```xml
+<dependency>
+    <groupId>com.github.aint</groupId>
+    <artifactId>octopus-autoconfiguaration</artifactId>
+    <version>master-SNAPSHOT</version>
+</dependency>
+```   
+
+**That's it!**
