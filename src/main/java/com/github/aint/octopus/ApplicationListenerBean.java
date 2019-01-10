@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.ContextStoppedEvent;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -25,6 +26,13 @@ public class ApplicationListenerBean implements ApplicationListener {
         if (event instanceof ContextRefreshedEvent) {
             try {
                 sendPostRequest(json);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (event instanceof ContextStoppedEvent) {
+            try {
+                DependencyJson depJson = new DependencyJson(DependencyJson.EventType.DELETE, json.getServiceName(), "api", null);
+                sendPostRequest(depJson);
             } catch (IOException e) {
                 e.printStackTrace();
             }
