@@ -1,5 +1,10 @@
 package com.github.aint.octopus;
 
+import java.sql.DriverManager;
+import java.util.Collections;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public class JdbcResolver {
 
     private static final String MY_SQL = "MySQL";
@@ -28,6 +33,13 @@ public class JdbcResolver {
         } else {
             return "Unknown DB";
         }
+    }
+
+    public static Set<String> getDbNames() {
+        return Collections.list(DriverManager.getDrivers()).stream()
+                .map(driver -> driver.getClass().getName())
+                .map(JdbcResolver::getDbName)
+                .collect(Collectors.toSet());
     }
 
 }

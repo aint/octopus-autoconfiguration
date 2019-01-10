@@ -46,14 +46,7 @@ public class IntegrationsActuatorEndpoint {
         String serviceName = getPropertyValue(strings, "application.name")
                 .orElseThrow(() -> new NoSuchElementException("application.name property not found"));
 
-        Enumeration<Driver> drivers = DriverManager.getDrivers();
-        Set<String> databases = new HashSet<>();
-        while (drivers.hasMoreElements()) {
-            String jdbcDriverName = drivers.nextElement().getClass().getName();
-            log.info(jdbcDriverName);
-            databases.add(JdbcResolver.getDbName(jdbcDriverName));
-        }
-        deps.put(DependencyJson.DependencyType.DATABASES, databases);
+        deps.put(DependencyJson.DependencyType.DATABASES, JdbcResolver.getDbNames());
 
         String serviceMetadata = String.format("%s %s", getJavaVersion(), getSpringVersion());
         return new DependencyJson(DependencyJson.EventType.CREATE, serviceName, serviceMetadata, deps);
