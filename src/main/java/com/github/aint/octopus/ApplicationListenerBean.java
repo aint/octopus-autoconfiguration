@@ -1,6 +1,7 @@
 package com.github.aint.octopus;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -24,35 +25,31 @@ public class ApplicationListenerBean implements ApplicationListener {
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
         if (event instanceof ContextRefreshedEvent) {
-            try {
-                sendPostRequest(json);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            sendPostRequest(json);
         } else if (event instanceof ContextStoppedEvent) {
-            try {
-                DependencyJson depJson = new DependencyJson(DependencyJson.EventType.DELETE, json.getServiceName(), "api", null);
-                sendPostRequest(depJson);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            DependencyJson depJson = new DependencyJson(DependencyJson.EventType.DELETE, json.getServiceName(), "api", null);
+            sendPostRequest(depJson);
         }
     }
 
-    private void sendPostRequest(DependencyJson json) throws IOException {
-        URL url = new URL(octopusUrl);
-        HttpURLConnection http = (HttpURLConnection) url.openConnection();
-        http.setRequestMethod("POST");
-        http.setDoOutput(true);
+    private void sendPostRequest(DependencyJson json) {
+        try {
+            URL url = new URL(octopusUrl);
+            HttpURLConnection http = (HttpURLConnection) url.openConnection();
+            http.setRequestMethod("POST");
+            http.setDoOutput(true);
 
-        byte[] out = new ObjectMapper().writeValueAsBytes(json);
-        int length = out.length;
+            byte[] out = new ObjectMapper().writeValueAsBytes(json);
+            int length = out.length;
 
-        http.setFixedLengthStreamingMode(length);
-        http.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-        http.connect();
-        try (OutputStream os = http.getOutputStream()) {
-            os.write(out);
+            http.setFixedLengthStreamingMode(length);
+            http.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            http.connect();
+            try (OutputStream os = http.getOutputStream()) {
+                os.write(out);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
