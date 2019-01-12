@@ -15,7 +15,7 @@ public class JdbcResolver {
     private static final String SQL_SERVER = "SQLServer";
     private static final String POSTGRE_SQL = "PostgreSql";
 
-    public static String getDbName(String jdbcDriverClassName) {
+    private static String getDbName(String jdbcDriverClassName) {
         if (jdbcDriverClassName.contains(MY_SQL.toLowerCase())) {
             return MY_SQL;
         } else if (jdbcDriverClassName.contains(ORACLE.toLowerCase())) {
