@@ -43,6 +43,13 @@ public class IntegrationsActuatorEndpoint {
 
         deps.put(DependencyJson.DependencyType.LAMBDAS, lambdas);
 
+        Set<String> thirdParty = strings.stream()
+                .filter(s -> s.startsWith(integrationPrefix + ".third-party"))
+                .map(s -> s.substring(integrationPrefix.length() + ".third-party".length() + 1))
+                .collect(Collectors.toSet());
+
+        deps.put(DependencyJson.DependencyType.THIRD_PARTY, thirdParty);
+
         String serviceName = getPropertyValue(strings, "application.name")
                 .orElseThrow(() -> new NoSuchElementException("application.name property not found"));
 
