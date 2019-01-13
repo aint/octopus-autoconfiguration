@@ -24,10 +24,7 @@ public class IntegrationsActuatorEndpoint {
 
         String integrationPrefix = getPropertyValue(strings,"octopus.integration.prefix").orElse("integration.base-url");
 
-        Set<String> services = strings.stream()
-                .filter(s -> s.startsWith(integrationPrefix + ".services"))
-                .map(s -> s.substring(integrationPrefix.length() + ".services".length() + 1))
-                .collect(Collectors.toSet());
+        Set<String> services = parseEntityNames(strings, integrationPrefix, ".services");
 
         Map<DependencyJson.DependencyType, Set<String>> deps = new EnumMap<>(DependencyJson.DependencyType.class);
         deps.put(DependencyJson.DependencyType.SERVICES, services);
@@ -43,10 +40,7 @@ public class IntegrationsActuatorEndpoint {
 
         deps.put(DependencyJson.DependencyType.LAMBDAS, lambdas);
 
-        Set<String> thirdParty = strings.stream()
-                .filter(s -> s.startsWith(integrationPrefix + ".third-party"))
-                .map(s -> s.substring(integrationPrefix.length() + ".third-party".length() + 1))
-                .collect(Collectors.toSet());
+        Set<String> thirdParty = parseEntityNames(strings, integrationPrefix, ".third-party");
 
         deps.put(DependencyJson.DependencyType.THIRD_PARTY, thirdParty);
 
@@ -57,6 +51,13 @@ public class IntegrationsActuatorEndpoint {
 
         String serviceMetadata = String.format("%s %s", getJavaVersion(), getSpringVersion());
         return new DependencyJson(DependencyJson.EventType.CREATE, serviceName, serviceMetadata, deps);
+    }
+
+    private Set<String> parseEntityNames(Set<String> strings, String integrationPrefix, String entity) {
+        return strings.stream()
+                .filter(s -> s.startsWith(integrationPrefix + entity))
+                .map(s -> s.substring(integrationPrefix.length() + entity.length() + 1))
+                .collect(Collectors.toSet());
     }
 
     private Optional<String> getPropertyValue(Set<String> properties, String propertyName) {
