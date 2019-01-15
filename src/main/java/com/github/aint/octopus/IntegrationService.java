@@ -34,6 +34,12 @@ public class IntegrationService {
         return parseEntityNames(propertyNames, integrationPropertyPrefix, lambdasEntity, parseFn);
     }
 
+    public Set<String> getThirdPartiesNames() {
+        String thirdPartyEntity = ".third-party";
+        UnaryOperator<String> parseFn = str -> str.substring(integrationPropertyPrefix.length() + thirdPartyEntity.length() + 1);
+        return parseEntityNames(propertyNames, integrationPropertyPrefix, thirdPartyEntity, parseFn);
+    }
+
     private Set<String> parseEntityNames(Set<String> strings,
                                          String integrationPrefix,
                                          String entity,
