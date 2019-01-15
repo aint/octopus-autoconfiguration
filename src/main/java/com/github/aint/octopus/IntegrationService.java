@@ -24,7 +24,7 @@ public class IntegrationService {
         return parseEntityNames(propertyNames, integrationPropertyPrefix, servicesEntity, parseFn);
     }
 
-    public Set<String> getLambdasNames() {
+    public Set<String> getLambdaNames() {
         String lambdasEntity = ".lambdas";
         UnaryOperator<String> parseFn = (String s) -> {
             int beginIndex = integrationPropertyPrefix.length() + lambdasEntity.length() + 1;
@@ -34,7 +34,7 @@ public class IntegrationService {
         return parseEntityNames(propertyNames, integrationPropertyPrefix, lambdasEntity, parseFn);
     }
 
-    public Set<String> getThirdPartiesNames() {
+    public Set<String> getThirdPartyNames() {
         String thirdPartyEntity = ".third-party";
         UnaryOperator<String> parseFn = str -> str.substring(integrationPropertyPrefix.length() + thirdPartyEntity.length() + 1);
         return parseEntityNames(propertyNames, integrationPropertyPrefix, thirdPartyEntity, parseFn);
