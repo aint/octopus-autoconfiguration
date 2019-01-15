@@ -24,6 +24,16 @@ public class IntegrationService {
         return parseEntityNames(propertyNames, integrationPropertyPrefix, servicesEntity, parseFn);
     }
 
+    public Set<String> getLambdasNames() {
+        String lambdasEntity = ".lambdas";
+        UnaryOperator<String> parseFn = (String s) -> {
+            int beginIndex = integrationPropertyPrefix.length() + lambdasEntity.length() + 1;
+            int endIndex = s.length() - 5;
+            return s.substring(beginIndex, endIndex);
+        };
+        return parseEntityNames(propertyNames, integrationPropertyPrefix, lambdasEntity, parseFn);
+    }
+
     private Set<String> parseEntityNames(Set<String> strings,
                                          String integrationPrefix,
                                          String entity,
