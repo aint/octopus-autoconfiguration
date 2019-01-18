@@ -3,7 +3,9 @@ package com.github.aint.octopus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.SpringVersion;
 import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SpringApplicationMetadata {
 
     @Autowired
