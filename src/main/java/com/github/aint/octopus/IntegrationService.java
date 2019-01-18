@@ -28,7 +28,8 @@ public class IntegrationService {
         String lambdasEntity = ".lambdas";
         UnaryOperator<String> parseFn = (String s) -> {
             int beginIndex = integrationPropertyPrefix.length() + lambdasEntity.length() + 1;
-            int endIndex = s.length() - 5;
+            int tailSize = s.endsWith("name") ? ".name".length() : ".qualifier".length();
+            int endIndex = s.length() - tailSize;
             return s.substring(beginIndex, endIndex);
         };
         return parseEntityNames(propertyNames, integrationPropertyPrefix, lambdasEntity, parseFn);
