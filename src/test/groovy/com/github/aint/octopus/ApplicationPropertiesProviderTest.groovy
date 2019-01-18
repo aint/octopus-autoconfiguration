@@ -33,7 +33,7 @@ class ApplicationPropertiesProviderTest extends Specification {
 
     def "GetProperty() with existing key"() {
         expect:
-        applicationPropertiesProvider.getProperty("key1") == "value2"
+        applicationPropertiesProvider.getProperty("key1") == "value1"
     }
 
     def "GetProperty() with not existing key"() {
