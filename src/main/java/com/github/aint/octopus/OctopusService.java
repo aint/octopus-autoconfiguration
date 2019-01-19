@@ -28,8 +28,9 @@ public class OctopusService {
         return new DependencyJson(DependencyJson.EventType.CREATE, appName, appMetadata, deps);
     }
 
-    public DependencyJson deleteEvent() {
-        return null;
+    public DependencyJson destroyEvent() {
+        String appName = springApplicationMetadata.getApplicationName();
+        return new DependencyJson(DependencyJson.EventType.DELETE, appName, null, null);
     }
 
 }
