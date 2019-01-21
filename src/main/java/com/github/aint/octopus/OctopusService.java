@@ -4,17 +4,16 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class OctopusService {
 
-    @Autowired
-    private IntegrationService integrationService;
-
-    @Autowired
-    private SpringApplicationMetadata springApplicationMetadata;
+    private final IntegrationService integrationService;
+    private final SpringApplicationMetadata springApplicationMetadata;
 
     public DependencyJson createEvent() {
         Map<DependencyJson.DependencyType, Set<String>> deps = new EnumMap<>(DependencyJson.DependencyType.class);
