@@ -15,20 +15,21 @@ import java.net.URL;
 public class ApplicationListenerBean implements ApplicationListener {
 
     private final String octopusUrl;
-    private final DependencyJson json;
+    private final OctopusService octopusService;
 
-    public ApplicationListenerBean(String octopusUrl, DependencyJson json) {
+    public ApplicationListenerBean(String octopusUrl, OctopusService octopusService) {
         this.octopusUrl = octopusUrl;
-        this.json = json;
+        this.octopusService = octopusService;
     }
 
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
         if (event instanceof ContextRefreshedEvent) {
+            DependencyJson json = octopusService.createEvent();
             sendPostRequest(json);
         } else if (event instanceof ContextStoppedEvent) {
-            DependencyJson depJson = new DependencyJson(DependencyJson.EventType.DELETE, json.getServiceName(), "api", null);
-            sendPostRequest(depJson);
+            DependencyJson json = octopusService.destroyEvent();
+            sendPostRequest(json);
         }
     }
 
