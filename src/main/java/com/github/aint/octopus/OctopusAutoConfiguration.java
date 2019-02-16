@@ -19,11 +19,9 @@ public class OctopusAutoConfiguration {
     }
 
     @Bean
-    public ApplicationListenerBean applicationListenerBean(IntegrationsActuatorEndpoint integrationsActuatorEndpoint,
-                                                           Environment environment) {
-        DependencyJson json = integrationsActuatorEndpoint.integrations();
+    public ApplicationListenerBean applicationListenerBean(OctopusService octopusService, Environment environment) {
         String url = environment.getRequiredProperty("octopus-server.url");
-        return new ApplicationListenerBean(url, json);
+        return new ApplicationListenerBean(url, octopusService);
     }
 
 }
