@@ -16,16 +16,20 @@ class IntegrationServiceTest extends Specification {
             "integration.third-party.naboo",
             "integration.third-party.tatooine"
     ]
+
+    private ApplicationPropertiesProvider propertiesProvider
+
     @Subject
     IntegrationService integrationService
 
-    def "GetServiceNames"() {
-        given:
-        ApplicationPropertiesProvider propertiesProvider = Stub(ApplicationPropertiesProvider)
+    def setup() {
+        propertiesProvider = Stub(ApplicationPropertiesProvider)
         propertiesProvider.getPropertyNames() >> integrationProperties
 
         integrationService = new IntegrationService(propertiesProvider, "integration")
+    }
 
+    def "GetServiceNames"() {
         when:
         def services = integrationService.getServiceNames()
 
@@ -34,12 +38,6 @@ class IntegrationServiceTest extends Specification {
     }
 
     def "GetLambdasNames"() {
-        given:
-        ApplicationPropertiesProvider propertiesProvider = Stub(ApplicationPropertiesProvider)
-        propertiesProvider.getPropertyNames() >> integrationProperties
-
-        integrationService = new IntegrationService(propertiesProvider, "integration")
-
         when:
         def lambdas = integrationService.getLambdaNames()
 
@@ -48,12 +46,6 @@ class IntegrationServiceTest extends Specification {
     }
 
     def "GetThirdPartiesNames"() {
-        given:
-        ApplicationPropertiesProvider propertiesProvider = Stub(ApplicationPropertiesProvider)
-        propertiesProvider.getPropertyNames() >> integrationProperties
-
-        integrationService = new IntegrationService(propertiesProvider, "integration")
-
         when:
         def thirdParties = integrationService.getThirdPartyNames()
 
