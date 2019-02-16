@@ -11,10 +11,9 @@ public class OctopusAutoConfiguration {
 
     @Bean
     public IntegrationService integrationService(ApplicationPropertiesProvider propertiesProvider) {
-        String integrationPrefix = propertiesProvider.getProperty("octopus.integration.prefix");
-        if (integrationPrefix == null) {
-            integrationPrefix = propertiesProvider.getProperty("integration.base-url");
-        }
+        String integrationPrefix = propertiesProvider
+                .getOptionProperty("octopus.integration.prefix")
+                .orElseGet(() -> "integration");
         return new IntegrationService(propertiesProvider, integrationPrefix);
     }
 
