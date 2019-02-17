@@ -1,6 +1,7 @@
 package com.github.aint.octopus;
 
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -28,6 +29,10 @@ public class ApplicationPropertiesProvider {
 
     public String getProperty(String name) {
         return env.getProperty(name);
+    }
+
+    public Optional<String> getOptionProperty(String name) {
+        return Optional.ofNullable(env.getProperty(name));
     }
 
 }
