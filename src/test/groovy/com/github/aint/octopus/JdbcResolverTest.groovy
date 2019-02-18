@@ -1,6 +1,7 @@
 package com.github.aint.octopus
 
 import spock.lang.Specification
+import spock.lang.Subject
 import spock.lang.Unroll
 
 import java.sql.Driver
@@ -8,15 +9,18 @@ import java.sql.DriverManager
 
 class JdbcResolverTest extends Specification {
 
+    @Subject
+    JdbcResolver jdbcResolver = new JdbcResolver()
+
     @Unroll
     def "getDbNames jdbc drivers #driverName is #dbName"() {
         given:
-        DriverManager.getDrivers().each { DriverManager.deregisterDriver(it); }
+        DriverManager.getDrivers().each { DriverManager.deregisterDriver(it) }
         and:
         DriverManager.registerDriver(Class.forName(driverName).newInstance() as Driver)
 
         when:
-        def dbNames = JdbcResolver.getDbNames()
+        def dbNames = jdbcResolver.getDbNames()
 
         then:
         dbNames.size() == 1
@@ -33,10 +37,10 @@ class JdbcResolverTest extends Specification {
 
     def "getDbNames with no jdbc drivers"() {
         given:
-        DriverManager.getDrivers().each { DriverManager.deregisterDriver(it); }
+        DriverManager.getDrivers().each { DriverManager.deregisterDriver(it) }
 
         when:
-        def dbNames = JdbcResolver.getDbNames()
+        def dbNames = jdbcResolver.getDbNames()
 
         then:
         dbNames.isEmpty()
