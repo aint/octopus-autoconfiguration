@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class JdbcResolver {
 
     private static final String MY_SQL = "MySQL";
@@ -15,7 +18,14 @@ public class JdbcResolver {
     private static final String SQL_SERVER = "SQLServer";
     private static final String POSTGRE_SQL = "PostgreSql";
 
-    private static String getDbName(String jdbcDriverClassName) {
+    public Set<String> getDbNames() {
+        return Collections.list(DriverManager.getDrivers()).stream()
+                .map(driver -> driver.getClass().getName())
+                .map(this::getDbName)
+                .collect(Collectors.toSet());
+    }
+
+    private String getDbName(String jdbcDriverClassName) {
         if (jdbcDriverClassName.contains(MY_SQL.toLowerCase())) {
             return MY_SQL;
         } else if (jdbcDriverClassName.contains(ORACLE.toLowerCase())) {
@@ -33,13 +43,6 @@ public class JdbcResolver {
         } else {
             return "Unknown DB";
         }
-    }
-
-    public static Set<String> getDbNames() {
-        return Collections.list(DriverManager.getDrivers()).stream()
-                .map(driver -> driver.getClass().getName())
-                .map(JdbcResolver::getDbName)
-                .collect(Collectors.toSet());
     }
 
 }
