@@ -7,17 +7,19 @@ import static org.assertj.core.api.Assertions.assertThat
 
 class OctopusServiceTest extends Specification {
 
-    private def integrationService
-    private def springApplicationMetadata
+    private JdbcResolver jdbcResolver
+    private IntegrationService integrationService
+    private SpringApplicationMetadata springApplicationMetadata
 
     @Subject
     OctopusService octopusService
 
     def setup() {
+        jdbcResolver              = Stub(JdbcResolver)
         integrationService        = Stub(IntegrationService)
         springApplicationMetadata = Stub(SpringApplicationMetadata)
 
-        octopusService = new OctopusService(integrationService, springApplicationMetadata)
+        octopusService = new OctopusService(jdbcResolver, integrationService, springApplicationMetadata)
     }
 
     def "CreateEvent"() {
@@ -28,6 +30,10 @@ class OctopusServiceTest extends Specification {
         integrationService.getServiceNames() >> services
         integrationService.getLambdaNames() >> lambdas
         integrationService.getThirdPartyNames() >> thirdParties
+
+        and:
+        final def databases = [ "MySQL", "Redis" ]
+        jdbcResolver.getDbNames() >> databases
 
         and:
         final def appName = "myapp"
@@ -52,7 +58,7 @@ class OctopusServiceTest extends Specification {
             assertThat(it.get(DependencyJson.DependencyType.SERVICES)).containsExactlyInAnyOrderElementsOf(services)
             assertThat(it.get(DependencyJson.DependencyType.LAMBDAS)).containsExactlyInAnyOrderElementsOf(lambdas)
             assertThat(it.get(DependencyJson.DependencyType.THIRD_PARTY)).containsExactlyInAnyOrderElementsOf(thirdParties)
-            assertThat(it.get(DependencyJson.DependencyType.DATABASES)).containsExactlyInAnyOrderElementsOf(["PostgreSql", "MySQL", "Unknown DB", "SQLServer"])
+            assertThat(it.get(DependencyJson.DependencyType.DATABASES)).containsExactlyInAnyOrderElementsOf(databases)
         }
     }
 
