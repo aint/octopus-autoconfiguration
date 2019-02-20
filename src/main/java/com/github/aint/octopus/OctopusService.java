@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class OctopusService {
 
+    private final JdbcResolver jdbcResolver;
     private final IntegrationService integrationService;
     private final SpringApplicationMetadata springApplicationMetadata;
 
@@ -20,7 +21,7 @@ public class OctopusService {
         deps.put(DependencyJson.DependencyType.SERVICES, integrationService.getServiceNames());
         deps.put(DependencyJson.DependencyType.LAMBDAS, integrationService.getLambdaNames());
         deps.put(DependencyJson.DependencyType.THIRD_PARTY, integrationService.getThirdPartyNames());
-        deps.put(DependencyJson.DependencyType.DATABASES, JdbcResolver.getDbNames());
+        deps.put(DependencyJson.DependencyType.DATABASES, jdbcResolver.getDbNames());
 
         String appName = springApplicationMetadata.getApplicationName();
         String appMetadata = springApplicationMetadata.getApplicationMetadata();
