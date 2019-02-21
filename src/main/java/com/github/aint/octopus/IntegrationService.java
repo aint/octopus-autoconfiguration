@@ -3,12 +3,15 @@ package com.github.aint.octopus;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class IntegrationService {
 
+    private final Pattern pattern;
     private final Set<String> propertyNames;
     private final String integrationPropertyPrefix;
 
@@ -16,11 +19,15 @@ public class IntegrationService {
     public IntegrationService(ApplicationPropertiesProvider propertiesProvider, String integrationPropertyPrefix) {
         propertyNames = propertiesProvider.getPropertyNames();
         this.integrationPropertyPrefix = integrationPropertyPrefix;
+        this.pattern = Pattern.compile(integrationPropertyPrefix + "\\.services\\.(.+)\\..+");
     }
 
     public Set<String> getServiceNames() {
         String servicesEntity = ".services";
-        UnaryOperator<String> parseFn = str -> str.substring(integrationPropertyPrefix.length() + servicesEntity.length() + 1);
+        UnaryOperator<String> parseFn = (String s) -> {
+            Matcher m = pattern.matcher(s);
+            return m.matches() ? m.group(1) : null;
+        };
         return parseEntityNames(propertyNames, integrationPropertyPrefix, servicesEntity, parseFn);
     }
 
