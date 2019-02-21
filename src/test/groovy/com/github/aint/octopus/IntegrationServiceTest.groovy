@@ -8,9 +8,11 @@ import static org.assertj.core.api.Assertions.assertThat
 class IntegrationServiceTest extends Specification {
 
     private static final def integrationProperties = [
-            "integration.services.coruscant",
-            "integration.services.corellia",
-            "integration.services.devaron",
+            "integration.services.coruscant.url",
+            "integration.services.coruscant.timeout",
+            "integration.services.corellia.url",
+            "integration.services.corellia.retry",
+            "integration.services.devaron.url",
             "integration.lambdas.bespin.name",
             "integration.lambdas.bespin.qualifier",
             "integration.third-party.naboo",
