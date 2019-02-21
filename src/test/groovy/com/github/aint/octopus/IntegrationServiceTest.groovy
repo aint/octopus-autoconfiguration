@@ -15,8 +15,8 @@ class IntegrationServiceTest extends Specification {
             "integration.services.devaron.url",
             "integration.lambdas.bespin.name",
             "integration.lambdas.bespin.qualifier",
-            "integration.third-party.naboo",
-            "integration.third-party.tatooine"
+            "integration.third-party.naboo.url",
+            "integration.third-party.tatooine.url"
     ]
 
     private ApplicationPropertiesProvider propertiesProvider
