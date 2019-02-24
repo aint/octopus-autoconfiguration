@@ -1,8 +1,8 @@
 package com.github.aint.octopus;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.endpoint.annotation.Endpoint;
 import org.springframework.boot.actuate.endpoint.annotation.ReadOperation;
 import org.springframework.stereotype.Component;
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @Endpoint(id = "createEvent")
+@RequiredArgsConstructor
 public class IntegrationsActuatorEndpoint {
 
-    @Autowired
-    private OctopusService octopusService;
+    private final OctopusService octopusService;
 
     @ReadOperation
     public DependencyJson integrations() {
