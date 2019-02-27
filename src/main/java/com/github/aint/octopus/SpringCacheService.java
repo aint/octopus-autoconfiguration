@@ -22,14 +22,14 @@ public class SpringCacheService {
             return cacheProvider;
         }
 
-        String cacheProvider = cacheManager.getClass().getSimpleName().toLowerCase();
-        if (cacheProvider.contains("memcached")) {
+        String cacheProvider = cacheManager.getClass().getSimpleName();
+        if (cacheProvider.toLowerCase().contains("memcached")) {
             log.debug("Memcached detected");
             return "Memcached";
-        } else if (cacheProvider.contains("redis")) {
+        } else if (cacheProvider.toLowerCase().contains("redis")) {
             log.debug("Redis detected");
             return "Redis";
-        } else if (cacheProvider.contains("hazelcast")) {
+        } else if (cacheProvider.toLowerCase().contains("hazelcast")) {
             log.debug("Hazelcast detected");
             return "Hazelcast";
         }
