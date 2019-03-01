@@ -21,6 +21,34 @@ Spring Boot autoconfiguration supports for Octopus project.
 
 ![Nothing is beyoun our reach](https://lindaivespol.files.wordpress.com/2018/06/pol.jpg)
 
+# Features
+
+# How it works
+
+```yaml
+integration:
+  services:
+    devaron:
+      url: http://devaron.service:8080
+      timeout: 10
+    coruscant:
+      url: http://coruscant.service:8080
+      timeout: 20
+    corellia:
+      url: http://corellia.service:8080
+      timeout: 30
+  lambdas:
+    bespin:
+      name: fully-qualified-name
+      qualifier: RELEASE
+  third-party:
+    tatooine: https://some.service
+
+octopus.integration.prefix: integration
+octopus-server.url: http://localhost:5000/consume
+```
+
+
 # Installation
 
 **Step 1.** Add the JitPack repository to your pom.xml file 
