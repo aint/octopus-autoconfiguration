@@ -1,5 +1,6 @@
 package com.github.aint.octopus
 
+import groovy.transform.CompileStatic
 import org.springframework.boot.autoconfigure.cache.CacheProperties
 import org.springframework.boot.autoconfigure.cache.CacheType
 import org.springframework.cache.support.SimpleCacheManager
@@ -8,6 +9,7 @@ import spock.lang.Subject
 
 import static org.assertj.core.api.Assertions.assertThat
 
+//@CompileStatic
 class SpringCacheServiceTest extends Specification {
 
     @Subject
@@ -21,10 +23,11 @@ class SpringCacheServiceTest extends Specification {
         springCacheService = new SpringCacheService(cacheManager, cacheProperties)
 
         when:
-        def cacheProviderName = springCacheService.getCacheProviderName()
+        def cacheProvider = springCacheService.getCacheProvider()
 
         then:
-        assertThat(cacheProviderName).isEqualTo(SimpleCacheManager.class.getSimpleName())
+        assertThat(cacheProvider.getName()).isEqualTo(SimpleCacheManager.class.getSimpleName())
+        assertThat(cacheProvider.getType()).isEqualTo("Embedded")
     }
 
     def "getCacheProviderName with set cacheProperties type"() {
@@ -36,10 +39,11 @@ class SpringCacheServiceTest extends Specification {
         springCacheService = new SpringCacheService(cacheManager, cacheProperties)
 
         when:
-        def cacheProviderName = springCacheService.getCacheProviderName()
+        def cacheProvider = springCacheService.getCacheProvider()
 
         then:
-        assertThat(cacheProviderName).isEqualTo(CacheType.REDIS.name())
+        assertThat(cacheProvider.getName()).isEqualTo(CacheType.REDIS.name())
+        assertThat(cacheProvider.getType()).isEqualTo("Standalone")
     }
 
 }
