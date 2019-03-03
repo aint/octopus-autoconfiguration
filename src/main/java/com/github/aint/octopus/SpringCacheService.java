@@ -38,7 +38,7 @@ public class SpringCacheService {
         }
 
         log.debug("{} detected", cacheProvider);
-        return new CacheProvider(cacheProvider, "Embedded");
+        return new CacheProvider(cacheProvider.replace(CacheManager.class.getSimpleName(), ""), "Embedded");
     }
 
     private boolean isEmbeddedType(String cacheProviderName) {
