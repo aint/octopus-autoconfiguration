@@ -1,9 +1,9 @@
 package com.github.aint.octopus
 
 import io.sixhours.memcached.cache.MemcachedCacheManager
-import org.springframework.boot.autoconfigure.cache.CacheProperties
-import org.springframework.boot.autoconfigure.cache.CacheType
 import org.springframework.cache.support.SimpleCacheManager
+import org.springframework.data.redis.cache.RedisCacheManager
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -16,10 +16,9 @@ class SpringCacheServiceTest extends Specification {
 
     def "getCacheProvider for simple cache"() {
         given:
-        def cacheManager    = new SimpleCacheManager()
-        def cacheProperties = new CacheProperties()
+        def cacheManager = new SimpleCacheManager()
 
-        springCacheService = new SpringCacheService(cacheManager, cacheProperties)
+        springCacheService = new SpringCacheService(cacheManager)
 
         when:
         def cacheProvider = springCacheService.getCacheProvider()
@@ -31,10 +30,9 @@ class SpringCacheServiceTest extends Specification {
 
     def "getCacheProvider for Memcached"() {
         given:
-        def cacheManager    = new MemcachedCacheManager(null)
-        def cacheProperties = new CacheProperties()
+        def cacheManager = new MemcachedCacheManager(null)
 
-        springCacheService = new SpringCacheService(cacheManager, cacheProperties)
+        springCacheService = new SpringCacheService(cacheManager)
 
         when:
         def cacheProvider = springCacheService.getCacheProvider()
@@ -46,17 +44,15 @@ class SpringCacheServiceTest extends Specification {
 
     def "getCacheProvider for Redis"() {
         given:
-        def cacheManager    = null
-        def cacheProperties = new CacheProperties()
-        cacheProperties.setType(CacheType.REDIS)
+        def cacheManager = RedisCacheManager.builder(new LettuceConnectionFactory()).build()
 
-        springCacheService = new SpringCacheService(cacheManager, cacheProperties)
+        springCacheService = new SpringCacheService(cacheManager)
 
         when:
         def cacheProvider = springCacheService.getCacheProvider()
 
         then:
-        assertThat(cacheProvider.getName()).isEqualTo(CacheType.REDIS.name())
+        assertThat(cacheProvider.getName()).isEqualTo("Redis")
         assertThat(cacheProvider.getType()).isEqualTo("Standalone")
     }
 
