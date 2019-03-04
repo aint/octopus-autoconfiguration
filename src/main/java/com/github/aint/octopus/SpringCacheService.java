@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.boot.autoconfigure.cache.CacheType;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Component;
@@ -16,15 +15,8 @@ import org.springframework.stereotype.Component;
 public class SpringCacheService {
 
     private final CacheManager cacheManager;
-    private final CacheProperties cacheProperties;
 
     public CacheProvider getCacheProvider() {
-        if (cacheProperties.getType() != null) {
-            String cacheProvider = cacheProperties.getType().name();
-            log.debug("{} detected", cacheProvider);
-            return new CacheProvider(cacheProvider, isEmbeddedType(cacheProvider) ? "Embedded" : "Standalone");
-        }
-
         String cacheProvider = cacheManager.getClass().getSimpleName();
         if (cacheProvider.toLowerCase().contains("memcached")) {
             log.debug("Memcached detected");
@@ -38,7 +30,8 @@ public class SpringCacheService {
         }
 
         log.debug("{} detected", cacheProvider);
-        return new CacheProvider(cacheProvider.replace(CacheManager.class.getSimpleName(), ""), "Embedded");
+        String cacheProviderName = cacheProvider.replace(CacheManager.class.getSimpleName(), "");
+        return new CacheProvider(cacheProviderName, isEmbeddedType(cacheProviderName) ? "Embedded" : "Standalone");
     }
 
     private boolean isEmbeddedType(String cacheProviderName) {
