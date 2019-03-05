@@ -31,7 +31,7 @@ public class IntegrationService {
     }
 
     private Set<String> parseEntityNames(String entity) {
-        Pattern pattern = Pattern.compile(integrationPropertyPrefix + "\\." + entity + "\\.(.+)\\..+");
+        Pattern pattern = Pattern.compile(integrationPropertyPrefix + "\\." + entity + "\\.([^.]+)\\..+");
 
         return propertyNames.stream()
                 .map(pattern::matcher)

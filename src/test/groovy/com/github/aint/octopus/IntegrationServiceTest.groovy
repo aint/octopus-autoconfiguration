@@ -10,12 +10,14 @@ class IntegrationServiceTest extends Specification {
     private static final def integrationProperties = [
             "integration.services.coruscant.url",
             "integration.services.coruscant.timeout",
+            "integration.services.coruscant.logs.enable",
             "integration.services.corellia.url",
             "integration.services.corellia.retry",
             "integration.services.devaron.url",
             "integration.lambdas.bespin.name",
             "integration.lambdas.bespin.qualifier",
             "integration.third-party.naboo.url",
+            "integration.third-party.naboo.http2.enabled",
             "integration.third-party.tatooine.url"
     ]
 
