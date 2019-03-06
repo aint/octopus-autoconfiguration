@@ -1,6 +1,7 @@
 package com.github.aint.octopus
 
 import io.sixhours.memcached.cache.MemcachedCacheManager
+import org.springframework.cache.support.NoOpCacheManager
 import org.springframework.cache.support.SimpleCacheManager
 import org.springframework.data.redis.cache.RedisCacheManager
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory
@@ -26,6 +27,20 @@ class SpringCacheServiceTest extends Specification {
         then:
         assertThat(cacheProvider.getName()).isEqualTo("Simple")
         assertThat(cacheProvider.getType()).isEqualTo("Embedded")
+    }
+
+    def "getCacheProvider for unknown cache"() {
+        given:
+        def cacheManager = new NoOpCacheManager()
+
+        springCacheService = new SpringCacheService(cacheManager)
+
+        when:
+        def cacheProvider = springCacheService.getCacheProvider()
+
+        then:
+        assertThat(cacheProvider.getName()).isEqualTo("NoOp")
+        assertThat(cacheProvider.getType()).isEqualTo("Unknown")
     }
 
     def "getCacheProvider for Memcached"() {
