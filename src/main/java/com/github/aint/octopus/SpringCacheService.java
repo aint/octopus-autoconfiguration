@@ -45,19 +45,21 @@ public class SpringCacheService {
     }
 
     private boolean isEmbeddedType(String cacheProviderName) {
-        if (cacheProviderName.contains(CacheType.CAFFEINE.name())
+        cacheProviderName = cacheProviderName.toUpperCase();
+        return cacheProviderName.contains(CacheType.SIMPLE.name())
                 || cacheProviderName.contains(CacheType.GENERIC.name())
-                || cacheProviderName.contains(CacheType.SIMPLE.name())) {
-            return true;
-        }
-        return false;
+                || cacheProviderName.contains(CacheType.CAFFEINE.name())
+                || cacheProviderName.contains(CacheType.EHCACHE.name())  // check
+                || cacheProviderName.contains("Map".toUpperCase());
+    }
+
     private boolean isStandaloneType(String cacheProviderName) {
-        cacheProviderName = cacheProviderName.toLowerCase();
-        return cacheProviderName.contains("redis")
-                || cacheProviderName.contains("memcached")
-                || cacheProviderName.contains("hazelcast") // check
-                || cacheProviderName.contains("infinispan") // check
-                || cacheProviderName.contains("couchbase"); // check
+        cacheProviderName = cacheProviderName.toUpperCase();
+        return cacheProviderName.contains(CacheType.REDIS.name())
+                || cacheProviderName.contains(CacheType.HAZELCAST.name())  // check
+                || cacheProviderName.contains(CacheType.INFINISPAN.name()) // check
+                || cacheProviderName.contains(CacheType.COUCHBASE.name())  // check
+                || cacheProviderName.contains("MEMCACHED");
     }
 
     @Data
