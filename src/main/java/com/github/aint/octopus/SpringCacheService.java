@@ -31,7 +31,17 @@ public class SpringCacheService {
 
         log.debug("{} detected", cacheProvider);
         String cacheProviderName = cacheProvider.replace(CacheManager.class.getSimpleName(), "");
-        return new CacheProvider(cacheProviderName, isEmbeddedType(cacheProviderName) ? "Embedded" : "Standalone");
+        return new CacheProvider(cacheProviderName, resolveCacheProviderType(cacheProviderName));
+    }
+
+    private String resolveCacheProviderType(String cacheProviderName) {
+        if (isEmbeddedType(cacheProviderName)) {
+            return "Embedded";
+        }
+        if (isStandaloneType(cacheProviderName)) {
+            return "Standalone";
+        }
+        return "Unknown";
     }
 
     private boolean isEmbeddedType(String cacheProviderName) {
@@ -41,6 +51,13 @@ public class SpringCacheService {
             return true;
         }
         return false;
+    private boolean isStandaloneType(String cacheProviderName) {
+        cacheProviderName = cacheProviderName.toLowerCase();
+        return cacheProviderName.contains("redis")
+                || cacheProviderName.contains("memcached")
+                || cacheProviderName.contains("hazelcast") // check
+                || cacheProviderName.contains("infinispan") // check
+                || cacheProviderName.contains("couchbase"); // check
     }
 
     @Data
