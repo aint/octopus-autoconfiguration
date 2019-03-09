@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat
 
 class OctopusServiceTest extends Specification {
 
-    private JdbcResolver jdbcResolver
+    private DatabaseService databaseService
     private IntegrationService integrationService
     private SpringApplicationMetadata springApplicationMetadata
 
@@ -15,11 +15,11 @@ class OctopusServiceTest extends Specification {
     OctopusService octopusService
 
     def setup() {
-        jdbcResolver              = Stub(JdbcResolver)
-        integrationService        = Stub(IntegrationService)
-        springApplicationMetadata = Stub(SpringApplicationMetadata)
+        databaseService = Stub()
+        integrationService = Stub()
+        springApplicationMetadata = Stub()
 
-        octopusService = new OctopusService(jdbcResolver, integrationService, springApplicationMetadata)
+        octopusService = new OctopusService(databaseService, integrationService, springApplicationMetadata)
     }
 
     def "CreateEvent"() {
@@ -33,7 +33,7 @@ class OctopusServiceTest extends Specification {
 
         and:
         final def databases = [ "MySQL", "Redis" ]
-        jdbcResolver.getDbNames() >> databases
+        databaseService.dbs() >> databases
 
         and:
         final def appName = "myapp"
