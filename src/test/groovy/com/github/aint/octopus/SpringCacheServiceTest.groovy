@@ -26,7 +26,7 @@ class SpringCacheServiceTest extends Specification {
 
         then:
         assertThat(cacheProvider.getName()).isEqualTo("Simple")
-        assertThat(cacheProvider.getType()).isEqualTo("Embedded")
+        assertThat(cacheProvider.getType()).isEqualTo(SpringCacheService.CacheProviderType.EMBEDDED)
     }
 
     def "getCacheProvider for unknown cache"() {
@@ -40,7 +40,7 @@ class SpringCacheServiceTest extends Specification {
 
         then:
         assertThat(cacheProvider.getName()).isEqualTo("NoOp")
-        assertThat(cacheProvider.getType()).isEqualTo("Unknown")
+        assertThat(cacheProvider.getType()).isEqualTo(SpringCacheService.CacheProviderType.UNKNOWN)
     }
 
     def "getCacheProvider for Memcached"() {
@@ -54,7 +54,7 @@ class SpringCacheServiceTest extends Specification {
 
         then:
         assertThat(cacheProvider.getName()).isEqualTo("Memcached")
-        assertThat(cacheProvider.getType()).isEqualTo("Standalone")
+        assertThat(cacheProvider.getType()).isEqualTo(SpringCacheService.CacheProviderType.STANDALONE)
     }
 
     def "getCacheProvider for Redis"() {
@@ -68,7 +68,7 @@ class SpringCacheServiceTest extends Specification {
 
         then:
         assertThat(cacheProvider.getName()).isEqualTo("Redis")
-        assertThat(cacheProvider.getType()).isEqualTo("Standalone")
+        assertThat(cacheProvider.getType()).isEqualTo(SpringCacheService.CacheProviderType.STANDALONE)
     }
 
 }

@@ -24,7 +24,7 @@ public class DatabaseService {
         optionalSpringCacheService.ifAvailable(springCacheService -> {
             SpringCacheService.CacheProvider cacheProvider = springCacheService.getCacheProvider();
             log.warn("DBS: cache {}", cacheProvider);
-            if ("Standalone".equals(cacheProvider.getType())) {
+            if (cacheProvider.getType() == SpringCacheService.CacheProviderType.STANDALONE) {
                 dbs.add(cacheProvider.getName());
             }
         });

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.ObjectProvider
 import spock.lang.Specification
 import spock.lang.Subject
 
+import static com.github.aint.octopus.SpringCacheService.CacheProviderType.*
 import static org.assertj.core.api.Assertions.assertThat
 
 class DatabaseServiceTest extends Specification {
@@ -40,7 +41,7 @@ class DatabaseServiceTest extends Specification {
 
     def "dbs with only embedded cache"() {
         given:
-        final def cacheProvider = new SpringCacheService.CacheProvider("Caffeine", "Embedded")
+        final def cacheProvider = new SpringCacheService.CacheProvider("Caffeine", EMBEDDED)
         springCacheService.getCacheProvider() >> cacheProvider
         optionalSpringCacheService.getIfAvailable() >> springCacheService
 
@@ -60,7 +61,7 @@ class DatabaseServiceTest extends Specification {
         jdbcResolver.dbNames >> dbNames
 
         and:
-        final def cacheProvider = new SpringCacheService.CacheProvider("Caffeine", "Embedded")
+        final def cacheProvider = new SpringCacheService.CacheProvider("Caffeine", EMBEDDED)
         springCacheService.getCacheProvider() >> cacheProvider
         optionalSpringCacheService.getIfAvailable() >> springCacheService
 
@@ -77,7 +78,7 @@ class DatabaseServiceTest extends Specification {
         jdbcResolver.dbNames >> dbNames
 
         and:
-        final def cacheProvider = new SpringCacheService.CacheProvider("Redis", "Standalone")
+        final def cacheProvider = new SpringCacheService.CacheProvider("Redis", STANDALONE)
         springCacheService.getCacheProvider() >> cacheProvider
         optionalSpringCacheService.getIfAvailable() >> springCacheService
 

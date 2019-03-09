@@ -2,6 +2,7 @@ package com.github.aint.octopus;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,13 +21,13 @@ public class SpringCacheService {
         String cacheProvider = cacheManager.getClass().getSimpleName();
         if (cacheProvider.toLowerCase().contains("memcached")) {
             log.debug("Memcached detected");
-            return new CacheProvider("Memcached", "Standalone");
+            return new CacheProvider("Memcached", CacheProviderType.STANDALONE);
         } else if (cacheProvider.toLowerCase().contains("redis")) {
             log.debug("Redis detected");
-            return new CacheProvider("Redis", "Standalone");
+            return new CacheProvider("Redis", CacheProviderType.STANDALONE);
         } else if (cacheProvider.toLowerCase().contains("hazelcast")) {
             log.debug("Hazelcast detected");
-            return new CacheProvider("Hazelcast", "Standalone");
+            return new CacheProvider("Hazelcast", CacheProviderType.STANDALONE);
         }
 
         log.debug("{} detected", cacheProvider);
@@ -34,14 +35,14 @@ public class SpringCacheService {
         return new CacheProvider(cacheProviderName, resolveCacheProviderType(cacheProviderName));
     }
 
-    private String resolveCacheProviderType(String cacheProviderName) {
+    private CacheProviderType resolveCacheProviderType(String cacheProviderName) {
         if (isEmbeddedType(cacheProviderName)) {
-            return "Embedded";
+            return CacheProviderType.EMBEDDED;
         }
         if (isStandaloneType(cacheProviderName)) {
-            return "Standalone";
+            return CacheProviderType.STANDALONE;
         }
-        return "Unknown";
+        return CacheProviderType.UNKNOWN;
     }
 
     private boolean isEmbeddedType(String cacheProviderName) {
@@ -67,8 +68,16 @@ public class SpringCacheService {
     public static class CacheProvider {
 
         private String name;
-        private String type; // enum?
+        private CacheProviderType type;
 
+    }
+
+    @Getter
+    @RequiredArgsConstructor
+    public enum CacheProviderType {
+        EMBEDDED("Embedded"), STANDALONE("Standalone"), UNKNOWN("Unknown");
+
+        private final String type;
     }
 
 }
