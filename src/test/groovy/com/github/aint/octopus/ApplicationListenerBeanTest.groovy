@@ -13,6 +13,8 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMoc
 
 class ApplicationListenerBeanTest extends Specification {
 
+    private static final Integer PORT = 8383
+    private static final String OCTOPUS_URL = "http://localhost:${PORT}/"
     @Subject
     private ApplicationListenerBean applicationListenerBean
 
@@ -20,23 +22,23 @@ class ApplicationListenerBeanTest extends Specification {
     private RestTemplate restTemplate
 
     @Shared
-    private WireMockServer wireMockServer = new WireMockServer(wireMockConfig().port(8383))
 
-    private static final String octopusUrl = "http://localhost:8383/"
+    private WireMockServer wireMockServer = new WireMockServer(wireMockConfig().port(PORT))
 
     def setupSpec() {
         wireMockServer.start()
     }
 
     def setup() {
+        wireMockServer.resetAll()
         restTemplate = Spy()
-        octopusService = Mock()
+        octopusService = Stub()
 
-        applicationListenerBean = new ApplicationListenerBean(octopusUrl, octopusService, restTemplate)
+        applicationListenerBean = new ApplicationListenerBean(OCTOPUS_URL, octopusService, restTemplate)
     }
 
-    def cleanup() {
-        wireMockServer.resetAll()
+    def cleanupSpec() {
+        wireMockServer.shutdown()
     }
 
     def "OnApplicationEvent with context refreshed event"() {
@@ -44,17 +46,37 @@ class ApplicationListenerBeanTest extends Specification {
         def event = new ContextRefreshedEvent(new GenericApplicationContext())
 
         and:
-        def json = DependencyJson.builder()
+        def dependencyJson = DependencyJson.builder()
+                .eventType(DependencyJson.EventType.CREATE)
                 .serviceName("devaron")
                 .serviceMetadata("Java 11, Spring 5")
-                .eventType(DependencyJson.EventType.CREATE)
                 .build()
-        octopusService.createEvent() >> json
+        octopusService.createEvent() >> dependencyJson
 
         and:
-        wireMockServer.stubFor(
-                post("/").willReturn(aResponse().withStatus(201))
+        wireMockServer.stubFor(post("/").willReturn(ok()))
+
+        when:
+        applicationListenerBean.onApplicationEvent(event)
+
+        then:
+        1 * restTemplate.postForEntity(OCTOPUS_URL, { it == dependencyJson }, Void.class)
+
+        and:
+        def json = """
+                   {
+                     "eventType": "${dependencyJson.eventType.name()}",
+                     "serviceName": "${dependencyJson.serviceName}",
+                     "serviceMetadata": "${dependencyJson.serviceMetadata}",
+                     "dependencies": null
+                   }
+                   """
+        wireMockServer.verify(
+                postRequestedFor(urlEqualTo("/"))
+                        .withHeader("Content-Type", equalTo("application/json;charset=UTF-8"))
+                        .withRequestBody(equalToJson(json))
         )
+    }
 
         when:
         applicationListenerBean.onApplicationEvent(event)
