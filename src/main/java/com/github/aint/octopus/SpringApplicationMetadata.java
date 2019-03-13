@@ -24,8 +24,15 @@ public class SpringApplicationMetadata {
         return String.format("%s %s", getJavaVersion(), getSpringVersion());
     }
 
-    private static String getJavaVersion() {
-        return System.getProperty("java.version");
+    public int getJavaVersion() {
+        String version = System.getProperty("java.version");
+        if (version.startsWith("1.")) {
+            version = version.substring(2);
+        }
+
+        int dotPos = version.indexOf('.');
+        int dashPos = version.indexOf('-');
+        return Integer.parseInt(version.substring(0, dotPos > -1 ? dotPos : dashPos > -1 ? dashPos : 1));
     }
 
     public String getSpringVersion() {

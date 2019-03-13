@@ -45,6 +45,14 @@ class SpringApplicationMetadataTest extends Specification {
         thrown IllegalStateException
     }
 
+    def "GetJavaVersion"() {
+        when:
+        def javaVersion = springApplicationMetadata.getJavaVersion()
+
+        then:
+        javaVersion == 8
+    }
+
     def "GetSpringVersion"() {
         when:
         def springVersion = springApplicationMetadata.getSpringVersion()
