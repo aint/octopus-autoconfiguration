@@ -1,18 +1,19 @@
 package com.github.aint.octopus;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.SpringVersion;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class SpringApplicationMetadata {
 
-    @Autowired
-    private Environment environment;
+    private final Environment environment;
 
     public String getApplicationName() {
-        return environment.getRequiredProperty("application.name");
+        return environment.getRequiredProperty("spring.application.name");
     }
 
     public String getApplicationMetadata() {
