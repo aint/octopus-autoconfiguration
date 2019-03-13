@@ -2,6 +2,7 @@ package com.github.aint.octopus
 
 import org.springframework.beans.factory.ObjectProvider
 import org.springframework.cache.CacheManager
+import org.springframework.core.SpringVersion
 import org.springframework.core.env.Environment
 import spock.lang.Specification
 import spock.lang.Subject
@@ -42,6 +43,14 @@ class SpringApplicationMetadataTest extends Specification {
 
         then:
         thrown IllegalStateException
+    }
+
+    def "GetSpringVersion"() {
+        when:
+        def springVersion = springApplicationMetadata.getSpringVersion()
+
+        then:
+        SpringVersion.getVersion().startsWith(springVersion)
     }
 
 }
