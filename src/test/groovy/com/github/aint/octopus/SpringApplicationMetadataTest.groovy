@@ -2,6 +2,7 @@ package com.github.aint.octopus
 
 import org.springframework.beans.factory.ObjectProvider
 import org.springframework.cache.CacheManager
+import org.springframework.cache.support.NoOpCacheManager
 import org.springframework.core.SpringVersion
 import org.springframework.core.env.Environment
 import spock.lang.Specification
@@ -20,6 +21,22 @@ class SpringApplicationMetadataTest extends Specification {
         optionalCacheManager = Mock()
 
         springApplicationMetadata = new SpringApplicationMetadata(environment, optionalCacheManager)
+    }
+
+    def "IsCachingEnabled true"() {
+        given:
+        optionalCacheManager.getIfAvailable() >> new NoOpCacheManager()
+
+        expect:
+        springApplicationMetadata.isCachingEnabled()
+    }
+
+    def "IsCachingEnabled false"() {
+        given:
+        optionalCacheManager.getIfAvailable() >> null
+
+        expect:
+        !springApplicationMetadata.isCachingEnabled()
     }
 
     def "GetApplicationName should succeed"() {

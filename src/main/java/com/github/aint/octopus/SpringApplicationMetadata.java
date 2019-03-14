@@ -1,10 +1,13 @@
 package com.github.aint.octopus;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.cache.CacheManager;
 import org.springframework.core.SpringVersion;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -14,14 +17,16 @@ import org.springframework.stereotype.Component;
 public class SpringApplicationMetadata {
 
     private static final Pattern SPRING_VERSION_PATTERN = Pattern.compile("(\\d\\.\\d)\\.\\d+\\.[\\w]+");
+
     private final Environment environment;
+    private final ObjectProvider<CacheManager> optionalCacheManager;
 
     public String getApplicationName() {
         return environment.getRequiredProperty("spring.application.name");
     }
 
-    public String getApplicationMetadata() {
-        return String.format("%s %s", getJavaVersion(), getSpringVersion());
+    public boolean isCachingEnabled() {
+        return optionalCacheManager.getIfAvailable() != null;
     }
 
     public int getJavaVersion() {
