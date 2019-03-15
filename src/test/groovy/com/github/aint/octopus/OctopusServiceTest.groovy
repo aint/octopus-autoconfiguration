@@ -37,9 +37,12 @@ class OctopusServiceTest extends Specification {
 
         and:
         final def appName = "myapp"
-        final def appMetadata = "java 11, spring 5"
+        final def springVersion = "5.2"
+        final def javaVersion = 10
         springApplicationMetadata.getApplicationName() >> appName
-        springApplicationMetadata.getApplicationMetadata() >> appMetadata
+        springApplicationMetadata.getSpringVersion() >> springVersion
+        springApplicationMetadata.getJavaVersion() >> javaVersion
+        springApplicationMetadata.isCachingEnabled() >> true
 
 
         when:
@@ -48,10 +51,11 @@ class OctopusServiceTest extends Specification {
 
         then:
         assertThat(json).isNotNull()
+        println json.serviceMetadata
         assertThat(json).satisfies {
             assertThat(it.getEventType()).isEqualTo(DependencyJson.EventType.CREATE)
             assertThat(it.getServiceName()).isEqualTo(appName)
-            assertThat(it.getServiceMetadata()).isEqualTo(appMetadata)
+            assertThat(it.getServiceMetadata()).isEqualTo("Java ${javaVersion}, Spring ${springVersion} | :cache:".toString())
         }
         assertThat(json.getDependencies()).hasSize(4)
         assertThat(json.getDependencies()).satisfies {

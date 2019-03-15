@@ -14,7 +14,7 @@ public class OctopusService {
 
     private final DatabaseService databaseService;
     private final IntegrationService integrationService;
-    private final SpringApplicationMetadata springApplicationMetadata;
+    private final SpringApplicationMetadata springAppMetadata;
 
     public DependencyJson createEvent() {
         Map<DependencyJson.DependencyType, Set<String>> deps = new EnumMap<>(DependencyJson.DependencyType.class);
@@ -23,13 +23,16 @@ public class OctopusService {
         deps.put(DependencyJson.DependencyType.THIRD_PARTY, integrationService.getThirdPartyNames());
         deps.put(DependencyJson.DependencyType.DATABASES, databaseService.dbs());
 
-        String appName = springApplicationMetadata.getApplicationName();
-        String appMetadata = springApplicationMetadata.getApplicationMetadata();
+        String appName = springAppMetadata.getApplicationName();
+        String appMetadata = String.format("Java %d, Spring %s %s",
+                springAppMetadata.getJavaVersion(),
+                springAppMetadata.getSpringVersion(),
+                springAppMetadata.isCachingEnabled() ? "| :cache:" : "");
         return new DependencyJson(DependencyJson.EventType.CREATE, appName, appMetadata, deps);
     }
 
     public DependencyJson destroyEvent() {
-        String appName = springApplicationMetadata.getApplicationName();
+        String appName = springAppMetadata.getApplicationName();
         return new DependencyJson(DependencyJson.EventType.DELETE, appName, null, null);
     }
 
