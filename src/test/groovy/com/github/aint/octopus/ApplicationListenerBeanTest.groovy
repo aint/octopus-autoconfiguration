@@ -51,6 +51,7 @@ class ApplicationListenerBeanTest extends Specification {
         def dependencyJson = DependencyJson.builder()
                 .eventType(DependencyJson.EventType.CREATE)
                 .serviceName("devaron")
+                .serviceType("svc")
                 .serviceMetadata("Java 11, Spring 5")
                 .build()
         octopusService.createEvent() >> dependencyJson
@@ -69,6 +70,7 @@ class ApplicationListenerBeanTest extends Specification {
                    {
                      "eventType": "${dependencyJson.eventType.name()}",
                      "serviceName": "${dependencyJson.serviceName}",
+                     "serviceType": "${dependencyJson.serviceType}",
                      "serviceMetadata": "${dependencyJson.serviceMetadata}",
                      "dependencies": null
                    }
@@ -88,6 +90,7 @@ class ApplicationListenerBeanTest extends Specification {
         def dependencyJson = DependencyJson.builder()
                 .eventType(DependencyJson.EventType.DELETE)
                 .serviceName("devaron")
+                .serviceType("svc")
                 .serviceMetadata("Java 11, Spring 5")
                 .build()
         octopusService.destroyEvent() >> dependencyJson
@@ -106,6 +109,7 @@ class ApplicationListenerBeanTest extends Specification {
                    {
                      "eventType": "${dependencyJson.eventType.name()}",
                      "serviceName": "${dependencyJson.serviceName}",
+                     "serviceType": "${dependencyJson.serviceType}",
                      "serviceMetadata": "${dependencyJson.serviceMetadata}",
                      "dependencies": null
                    }

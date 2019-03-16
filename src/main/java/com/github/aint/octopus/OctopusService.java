@@ -28,12 +28,12 @@ public class OctopusService {
                 springAppMetadata.getJavaVersion(),
                 springAppMetadata.getSpringVersion(),
                 springAppMetadata.isCachingEnabled() ? "| :cache:" : "");
-        return new DependencyJson(DependencyJson.EventType.CREATE, appName, appMetadata, deps);
+        return new DependencyJson(DependencyJson.EventType.CREATE, appName, "svc", appMetadata, deps);
     }
 
     public DependencyJson destroyEvent() {
         String appName = springAppMetadata.getApplicationName();
-        return new DependencyJson(DependencyJson.EventType.DELETE, appName, null, null);
+        return new DependencyJson(DependencyJson.EventType.DELETE, appName, null, null, null);
     }
 
 }

@@ -15,11 +15,9 @@ import lombok.NoArgsConstructor;
 public class DependencyJson {
 
     private EventType eventType;
-
     private String serviceName;
-
+    private String serviceType;
     private String serviceMetadata;
-
     private Map<DependencyType, Set<String>> dependencies;
 
     public enum EventType {
@@ -30,4 +28,5 @@ public class DependencyJson {
         SERVICES, LAMBDAS, DATABASES, THIRD_PARTY
     }
 
+    // DependencyType => EntityType
 }
