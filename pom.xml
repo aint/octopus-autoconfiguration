@@ -141,6 +141,34 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <header>license-header.txt</header>
+                    <properties>
+                        <license.owner>Oleksandr Tyshkovets</license.owner>
+                        <license.years>2018 - 2019</license.years>
+                        <license.email>olexandr.tyshkovets@gmail.com</license.email>
+                    </properties>
+                    <includes>
+                        <include>src/*/java/**/*.java</include>
+                        <include>src/*/groovy/**/*.groovy</include>
+                    </includes>
+                    <mapping>
+                        <java>SLASHSTAR_STYLE</java>
+                    </mapping>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                        <phase>process-sources</phase>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 

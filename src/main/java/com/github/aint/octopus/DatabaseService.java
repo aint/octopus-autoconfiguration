@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (C) 2018 - 2019 Oleksandr Tyshkovets <olexandr.tyshkovets@gmail.com>
  *
  * Licensed to the Apache Software Foundation (ASF) under one
