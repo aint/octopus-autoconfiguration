@@ -24,6 +24,30 @@ Spring Boot autoconfiguration supports for Octopus project.
 
 # Features
 
+This lib supports detection of:
+- SQL databases:
+    - [x] MySQL/MariaDB
+    - [x] PostgreSql
+    - [x] MS SQL Server
+    - [x] Oracle Database
+    - [x] DB2
+    - [x] Sybase
+    - [x] Teradata
+- NoSQL databases:
+    - [x] Redis
+    - [x] Memcached
+    - [x] Hazelcast
+    - [x] Infinispan
+- Spring
+    - [x] Cache
+    - [ ] Security
+    - [ ] REST/MVC
+- AWS
+    - [ ] Lambda
+    - [ ] S3/SQS/SES/etc
+- [ ] git origin url
+- [ ] read project's description from build tool
+
 # How it works
 
 ```yaml
