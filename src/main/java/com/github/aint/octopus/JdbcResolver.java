@@ -31,6 +31,7 @@ import org.springframework.stereotype.Component;
 public class JdbcResolver {
 
     private static final String MY_SQL = "MySQL";
+    private static final String MARIA_DB = "MariaDB";
     private static final String ORACLE = "Oracle";
     private static final String DB_2 = "DB2";
     private static final String SYBASE = "Sybase";
@@ -48,6 +49,8 @@ public class JdbcResolver {
     private String getDbName(String jdbcDriverClassName) {
         if (jdbcDriverClassName.contains(MY_SQL.toLowerCase())) {
             return MY_SQL;
+        } else if (jdbcDriverClassName.contains(MARIA_DB.toLowerCase())) {
+            return MARIA_DB;
         } else if (jdbcDriverClassName.contains(ORACLE.toLowerCase())) {
             return ORACLE;
         } else if (jdbcDriverClassName.contains(DB_2.toLowerCase())) {
