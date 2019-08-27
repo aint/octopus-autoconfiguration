@@ -98,3 +98,17 @@ octopus-server.url: http://localhost:5000/consume
 ```   
 
 **That's it!**
+
+# Dependencies
+ - Java 8
+ - Any build tool using Maven Central, or direct download
+ - Spring 4.x or 5.x
+ - Spring Boot 2.x (optional)
+
+
+
+https://github.com/zalando/logbook
+
+<a href="https://libraries.io/aint/octopus-autoconfiguration"><img src="https://img.shields.io/librariesio/github/aint/octopus-autoconfiguration.svg"></a>
+<a href="https://sourcegraph.com/github.com/aint/octopus-autoconfiguration" title="Octopus on Sourcegraph"><img src="https://img.shields.io/sourcegraph/rrc/github.com/aint/octopus-autoconfiguration.svg" alt="Octopus on Sourcegraph"></a>
+

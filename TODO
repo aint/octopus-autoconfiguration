@@ -1,0 +1,13 @@
+- handle exception when sending JSON?
+- add autoconfig processor
+- fix actuator endpoint
+- rename integrationSvc to propertyService
+- move to packages
+- improve logs
+- replace ApplicationListenerBean with new approach - @EventListener({ContextRefreshedEvent.class})
+- test
+    - replace AssertJ with default Spock assertions
+    - private for class members
+    - test autoconfig
+
+- golang lib

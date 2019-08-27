@@ -95,6 +95,7 @@ public class SpringCacheService {
     @Getter
     @RequiredArgsConstructor
     public enum CacheProviderType {
+        // local?
         EMBEDDED("Embedded"), STANDALONE("Standalone"), UNKNOWN("Unknown");
 
         private final String type;

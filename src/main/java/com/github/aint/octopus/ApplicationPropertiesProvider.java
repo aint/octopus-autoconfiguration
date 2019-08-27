@@ -27,11 +27,13 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ApplicationPropertiesProvider {
@@ -41,9 +43,11 @@ public class ApplicationPropertiesProvider {
     public Set<String> getPropertyNames() {
         return StreamSupport.stream(env.getPropertySources().spliterator(), false)
                 .filter(ps -> ps instanceof EnumerablePropertySource)
+                .peek(ps -> log.debug("Processing property source: {}", ps))
                 .filter(ps -> ps.getName().contains("applicationConfig:"))
                 .map(ps -> ((EnumerablePropertySource) ps).getPropertyNames())
                 .flatMap(Arrays::stream)
+                .peek(p -> log.warn("property: {}", p))
                 .collect(Collectors.toSet());
     }
 

@@ -20,7 +20,9 @@
  */
 package com.github.aint.octopus;
 
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -30,6 +32,8 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @ComponentScan(basePackageClasses = OctopusAutoConfiguration.class)
+@AutoConfigureAfter(RestTemplateAutoConfiguration.class)
+//@ConditionalOnBean(RestTemplate.class)
 public class OctopusAutoConfiguration {
 
     @Bean
@@ -51,5 +55,7 @@ public class OctopusAutoConfiguration {
         String url = environment.getRequiredProperty("octopus-server.url");
         return new ApplicationListenerBean(url, octopusService, restTemplate);
     }
+
+    //        ClassUtils.isPresent(className, context.getClassLoader())
 
 }

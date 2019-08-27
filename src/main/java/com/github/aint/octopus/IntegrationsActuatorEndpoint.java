@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@Endpoint(id = "createEvent")
+@Endpoint(id = "createEvent")  // fix it to integration
 @RequiredArgsConstructor
 public class IntegrationsActuatorEndpoint {
 
